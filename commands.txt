@@ -1,0 +1,298 @@
+tar zcpP -C /mnt/ . | docker import - ubuntu:ami-d732f0b7
+
+https://github.com/duduribeiro/terraform_ecs_fargate_example/tree/master/modules/ecs
+
+sudo docker run -ti --rm -v /home/globalicon/ -e docker.io/ubuntu bash
+
+
+sudo docker build -t demo1:1 .
+
+
+sudo docker build --no-cache -t infrazipped:1 .
+sudo docker build --no-cache -t demo1:1 .
+
+sudo docker ps -a | grep Created | cut -d ' ' -f 1 | xargs sudo docker rm
+sudo docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs sudo docker rm
+
+Installing terraform using Docker Image
+sudo docker run -i -t hashicorp/terraform:full plan main.tf
+
+docker run -d --privileged -p 8080:8080 <image_id>
+
+-d --privileged
+docker run -ti -d -rm -v /home/ec2-user -p e83c62739274 bash 
+
+curl http://localhost:8080
+
+sudo docker save demo1 > demo1.tar
+
+aws s3 cp demo1.tar s3://carrentalservice/demo1.tar
+
+aws s3 cp s3://outputs3jenkins/demo1.tar demo1.tar
+
+sudo docker load -i demo1.tar
+
+aws s3 cp --recursive s3://shalinijenkins/jenkins .
+
+
+http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.30/src/apache-tomcat-8.5.30-src.tar.gz
+
+
+#install : azure cli 
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo sh -c 'echo -e "[azure-cli]\nname=Azure CLI\nbaseurl=https://packages.microsoft.com/yumrepos/azure-cli\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/azure-cli.repo'
+sudo yum install azure-cli
+az login
+sudo yum update azure-cli
+
+
+==========================================================================
+
+#uninstall azure-cli
+sudo yum remove azure-cli
+sudo rm /etc/yum.repos.d/azure-cli.repo
+MSFT_KEY=`rpm -qa gpg-pubkey /* --qf "%{version}-%{release} %{summary}\n" | grep Microsoft | awk '{print $1}'`
+sudo rpm -e --allmatches gpg-pubkey-$MSFT_KEY
+=============================================================================
+Azure Login
+
+{
+    "cloudName": "AzureCloud",
+    "id": "56bb62a5-0579-4281-a4a9-edcbfe553b9d",
+    "isDefault": true,
+    "name": "Free Trial",
+    "state": "Enabled",
+    "tenantId": "4015746c-a7e0-45e9-a395-947ee4b1b68b",
+    "user": {
+      "name": "shalini.chatterji@gmail.com",
+      "type": "user"
+    }
+  }
+===============================================================================
+
+Next, create separate credentials for Terraform.
+
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/${SUBSCRIPTION_ID}"
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/56bb62a5-0579-4281-a4a9-edcbfe553b9d"
+
+"appId": "3ded3eee-32cc-42d9-922f-1b15d8c032c1",
+  "displayName": "azure-cli-2018-04-26-10-35-08",
+  "name": "http://azure-cli-2018-04-26-10-35-08",
+  "password": "8905639b-2cc3-4280-9d03-ba71d91edd09",
+  "tenant": "4015746c-a7e0-45e9-a395-947ee4b1b68b"
+============================================================================================
+
+Install Terraform on VM 
+
+sudo yum install -y zip unzip (if these are not installed)
+wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
+unzip terraform_0.11.7_linux_amd64.zip
+sudo mv terraform /usr/local/bin/
+Confirm terraform binary is accessible: terraform --version
+
+=============================================================================================
+Set environment variables for Terraform 
+
+export ARM_SUBSCRIPTION_ID=your_subscription_id
+export ARM_SUBSCRIPTION_ID=56bb62a5-0579-4281-a4a9-edcbfe553b9d
+export ARM_CLIENT_ID=your_appId
+export ARM_CLIENT_ID=3ded3eee-32cc-42d9-922f-1b15d8c032c1
+export ARM_CLIENT_SECRET=your_password
+export ARM_CLIENT_SECRET=8905639b-2cc3-4280-9d03-ba71d91edd09
+export ARM_TENANT_ID=your_tenant_id
+export ARM_TENANT_ID=4015746c-a7e0-45e9-a395-947ee4b1b68b
+=============================================================================================
+
+scp -i <filename> pemfile user@hostname:<path>
+
+#Docker login
+
+docker login --username=yourhubusername --email=youremail@company.com
+docker login --username=shalini1989 --email=shalini.chatterjee@tcs.com
+
+#Tag your docker image
+
+docker tag bb38976d03cf yourhubusername/verse_gapminder:firsttry
+docker tag 874f95179618 shalini1989/shalini-demo:latest
+
+#Push Docker image
+sudo docker push shalini1989/874f95179618
+
+
+
+
+
+
+FROM ubuntu:latest
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install openjdk-8-jdk wget
+RUN mkdir /usr/local/tomcat
+RUN wget http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.30/bin/apache-tomcat-8.5.30.tar.gz -O /tmp/tomcat.tar.gz
+RUN cd /tmp && tar xvfz tomcat.tar.gz
+RUN cp -Rv /tmp/apache-tomcat-8.5.30/* /usr/local/tomcat/
+EXPOSE 8080
+CMD /usr/local/tomcat/bin/catalina.sh run
+#################################################
+#FROM jenkins/jenkins:latest
+#ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+COPY wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+#COPY security.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy
+#COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+#RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+#COPY jenkins /var/jenkins_home
+
+
+http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+
+
+
+
+aws s3 cp s3://shalinijenkins/jenkins .
+
+aws s3 cp --recursive s3://shalinijenkins/ /home/ec2-user/jenkins
+
+
+docker exec -it fdf0e2bbd9ee bash
+
+
+
+###################################################################
+#####latest Docker file #########################################
+
+FROM ubuntu:latest
+RUN apt-get update
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install openssh-client
+RUN apt-get update
+RUN apt-get install vim
+RUN apt-get -y install openjdk-8-jdk wget
+RUN mkdir /usr/local/tomcat
+RUN wget http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.30/bin/apache-tomcat-8.5.30.tar.gz -O /tmp/tomcat.tar.gz
+RUN apt-get update
+RUN cd /tmp && tar xvfz tomcat.tar.gz
+RUN cp -Rv /tmp/apache-tomcat-8.5.30/* /usr/local/tomcat/
+EXPOSE 8080
+CMD /usr/local/tomcat/bin/catalina.sh run
+#################################################
+RUN wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O /tmp/jenkins.war
+RUN cp -Rv /tmp/jenkins.war /usr/local/tomcat/webapps/
+RUN cp jenkins /var/lib/jenkins
+####################################################################
+
+###################################################################
+#####latest Docker file #########################################
+FROM ubuntu:latest
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install openjdk-8-jdk wget
+RUN mkdir /usr/local/tomcat
+RUN wget http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.30/bin/apache-tomcat-8.5.30.tar.gz -O /tmp/tomcat.tar.gz
+RUN cd /tmp && tar xvfz tomcat.tar.gz
+RUN cp -Rv /tmp/apache-tomcat-8.5.30/* /usr/local/tomcat/
+EXPOSE 8080
+CMD /usr/local/tomcat/bin/catalina.sh run
+#################################################
+RUN wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O /tmp/jenkins.war
+RUN cp -Rv /tmp/jenkins.war /usr/local/tomcat/webapps/
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+COPY security.groovy /var/lib/jenkins/init.groovy.d/security.groovy
+
+
+RUN apt-get install docker.io -y
+
+FROM ubuntu:latest
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install openjdk-8-jdk wget
+RUN mkdir /usr/local/tomcat
+RUN wget http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.30/bin/apache-tomcat-8.5.30.tar.gz -O /tmp/tomcat.tar.gz
+RUN apt-get update
+RUN cd /tmp && tar xvfz tomcat.tar.gz
+RUN cp -Rv /tmp/apache-tomcat-8.5.30/* /usr/local/tomcat/
+EXPOSE 8080
+CMD /usr/local/tomcat/bin/catalina.sh run
+RUN wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O /tmp/jenkins.war
+RUN apt-get update
+RUN cp -Rv /tmp/jenkins.war /usr/local/tomcat/webapps/
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+ENV JENKINS_HOME /var/lib/jenkins
+COPY jenkins /var/lib/jenkins
+RUN apt-get -y install openssh-client
+sudo apt -y install vim
+RUN apt-get update
+RUN apt-get install docker.io -y
+
+
+
+
+
+
+Your identification has been saved in /var/lib/jenkins/githubrepos/.ssh/id_rsa.
+Your public key has been saved in /var/lib/jenkins/githubrepos/.ssh/id_rsa.pub.
+
+
+SHA256:MuxGI/ajovjqM5bn6KJdNm+2yahuRgi2hDZmmFc08dI root@648b61c3ad0d
+
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKOXb6Pv0nWzX048ZDmgGsLszPzyaMJo8lvNxhRctEnYhf106aiK+4jZzf+gu13E4YKI03SknQ/y/XFL4E0EKLoTrQsbWbhd/IsdWGHD1KZEqh+IiRPyQ6DkJbZ/OEhBCBGD/X+oohRtN35+UNeOosUAAiDqVOrDIeNuiLPAl3YFTZffHGzIyeCtHL3u0H6Lgfe3+u/QPJKLTzULyEL4+7urhl6x4iCsp2V6QCiTTsU1UpEnrz1a/62c/OHM7O1FzSXZOk5Sgu8JAOZAu4m/ib9jyhgulY1eSYXH62uuQ8h/d8cLAt0YXrfjQrV2XkQFvdaLVJZCwH2osHvn7foFcr root@648b61c3ad0d
+
+
+MIIEpgIBAAKCAQEAyjl2+j79J1s19OPGQ5oBrC7Mz88mjCaPJbzcYUXLRJ2IX9dO
+moivuI2c3/oLtdxOGCiNN0pJ0P8v1xS+BNBCi6E60LG1m4XfyLHVhhw9SmRKofiI
+kT8kOg5CW2fzhIQQgRg/1/qKIUbTd+flDXjqLFAAIg6lTqwyHjboizwJd2BU2X3x
+xsyMngrRy97tB+i4H3t/rv0DySi081C8hC+Pu7q4ZeseIgrKdlekAok07FNVKRJ6
+89Wv+tnPzhzOztRc0l2TpOUoLvCQDmQLuJv4m/Y8oYLpWNXkmFx+trrkPIf3fHCw
+LdGF6340K1dl5EBb3Wi1SWQsB9qLB75+36BXKwIDAQABAoIBAQCFrTri7WR28apX
+OYJECbf1U/J7pFm853hU3+VmP7bAosoVYMRLDvPpsWL0A9xd2UWeXqAK3oaxKx86
+tDFwCSMUHf49GlwMdJCboEKfpmc1l9pl+157dRvDbM2ckri87nfifl8lrC5HFQSR
+DK+zGiziIfgUi03nFZkDtBRAhe1UBSJp+DeDvjZK55x5DChpeZm3O/O6TLmzUmNd
+klfvY6IBRVE3xWUROMoCwd5XeLWRFGJdSN2v9cO2+LM4K9alQ1SF4hsxkzQkgLXJ
+RISbIjqEjAvlFrf1XhDGVTDebFn/Rp7Gf++URhqkRjTULBWYt5guu2Rl/N5nb+EO
++P1CV9QhAoGBAPJFIrnPgAOwPpMpJ+gFIaG2PGnSafo9sWhN4xImycwIIZ4W0C5a
+jf+85CP3/LLW2Er2o0lf/zpA4AB2ze44JFjVcin9KyWUvAtKOyDtX32wfUGnFZQb
++offZDijYvwxOMrXqheIdZeova4E4PoLmTCQZm4nxk+kkmKHsjQQZ2PzAoGBANWv
+WJMHEQFIGnaIeWOw2hiv6Tr1VNYucTh773iBF4SV5vjJDnONNh83pkobB4hHLXd1
+9TWdUcOSBuRQTinSOqvTqFYlDybyJzibrgSASlVeMPG0sceFmXYnTqvn5DZ/VuQ8
+r64GOabW50g4HS5rwylrdK+TKTveEvvkaQTD6uXpAoGBANHHo6YZUtPezJBI1tFF
+gDWywuUu2a1htjiHGNQi2iHd+J4XSvSYXNTRDwtGNH33IxrmLcXfZfVfL5e3R+G6
+o154lH5fRfkorRtpj4GXiVQgepVaxIiXIXx9px6T+6Y8SNz7mcD+3DQSXQxOFTDu
+0hsHLmq77jAQZOEEdv42JhCZAoGBAKBPZ2UOhRxwCqJoqqE22bhxqMk5qsbwmrJk
+kHjYaFto1ppIxFW+WB89cbzg4FrGA38++JKbju7pC9CXyrwnYyrrpLvUG7T9MJ2Q
+dhIcaSf4fUGobUOhoEr7HFNtqlGUYQzj1mz5cKERUvxkVMgxwn29hxH9lo66gYWG
+i58umHiZAoGBAOQ0jfXYe6QwoZrAt9WRpHl9JGlXQ8Yg6WDqjtsIOmONwAny8FxA
+ofWsB3hFvsC+rvz3qYPQcRJuz43fX3DcgIIs4PJxrwmFqfyr7nulWUQ80zqDoN6h
+RV2M+PYNsu6UjsS/NXugNHAaZ2ZegOIR64H3kLg2UYc2Wm27o2vsdewZ
+
+
+
+
+
+
+MAVEN_HOME=/usr/share/apache-maven
+M2_HOME=$MAVEN_HOME
+export MAVEN_HOME
+export M2_HOME
+
+
+ sudo docker run --ulimit memlock=819200000:819200000 -d -p 8080:8080 8966fbfd8f64
+
+
+####docker run -d --privileged --name container_x my_image
+
+
+https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
