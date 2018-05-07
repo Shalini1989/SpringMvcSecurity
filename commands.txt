@@ -280,19 +280,4 @@ export M2_HOME
 
 https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+sudo docker run -ti -e AWS_ACCESS_KEY_ID=AKIAIAE32U66OXGDM6YQ -e AWS_SECRET_ACCESS_KEY=6CPNAq9O4zg/7OkFJgg -e S3_BUCKET=outputs3jenkins -e AWS_DEFAULT_REGION=us-east-1 mavenenv bash
