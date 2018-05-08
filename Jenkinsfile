@@ -1,43 +1,33 @@
 node {
-   echo 'Hello World**'
-   def mvnHome
-   def var
-   git url: 'https://github.com/debgmail/SpringMvcSecurity.git'
-   mvnHome =  tool 'M3'
-   stage('checkout/preparation')
-   {  
+    def SERVICE_NAME
+    def TASK_FAMILY
+    def TASK_REVISION
+    def DESIRED_COUNT
+    git url: 'https://github.com/debgmail/SpringMvcSecurity.git'
+    stage('checkout'){  
        sh "rm -rf $WORKSPACE/*"	   
        checkout scm
-   }
-   stage('build') {
-      // some block
-	  // Run the maven build
-         sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean install"
     }
-    stage('Result') {
-       archive 'target/*.war'
-junit '**/target/surefire-reports/TEST-*.xml'
-	    
+    stage('Preparation') { // for display purposes          
+      sh "echo '-------preparation start--------------------------'"
+      //sh "/var/lib/jenkins/.local/bin/aws s3 cp s3://inputjenkinsbucket/myrepo-default-cluster.json $WORKSPACE/."
+      sh "/var/lib/jenkins/.local/bin/aws ecr describe-repositories"
+      sh "/var/lib/jenkins/.local/bin/aws ecr get-login --no-include-email >&1"
+      sh "docker pull 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest"
+      sh "echo '-------preparation end--------------------------'"
     }
-    stage('uploadtoRepo'){
-       sh '''
-       aws s3 cp **/target/*.war s3://outputs3jenkins --recursive
+    stage('Register task')
+    {
+        sh "/var/lib/jenkins/.local/bin/aws ecs register-task-definition --cli-input-json file://$WORKSPACE/config/myrepo-default-cluster.json"
     }
-    stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
-      //  app = docker.build("myimage")
-      sh "docker build -t myrepo --rm=true ."
+    stage('Run Service')
+    {
+        sh '''
+           TASK_FAMILY='first-run-task-defination'
+           TASK_REVISION=`/var/lib/jenkins/.local/bin/aws ecs describe-task-definition --task-definition myrepo | egrep 'revisio' | tr '/' ' ' | awk '{print $2}'  | sed 's/"$//' ` 
+           DESIRED_COUNT='1'
+           SERVICE_NAME='ecs-myrepo-service'
+           echo `/var/lib/jenkins/.local/bin/aws ecs update-service --cluster default  --service ${SERVICE_NAME} --task-definition myrepo:${TASK_REVISION} --desired-count ${DESIRED_COUNT}`
+        '''
     }
-    stage ('Docker push') {
-       sh '''
-         var=aws ecr get-login --no-include-email --region us-east-1
-         eval $var
-         docker tag myrepo:latest 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest
-         docker push 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest
-       '''
-    //   docker.withRegistry('https://085396960228.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:demo-ecr-credential')
-    //   docker.image('myrepo').push('latest')
-  }
-    
 }
