@@ -2,7 +2,25 @@ node {
    echo 'Hello World**'
    def mvnHome
    def var
-   git url: 'https://github.com/Shalini1989/SpringMvcSecurity.git'
+   def AWS_ACCESS_KEY_ID
+   def AWS_SECRET_ACCESS_KEY
+   def GIT_PWD
+   def GIT_USER
+   def GIT_URL
+	   
+   AWS_ACCESS_KEY_ID='AKIAIAE32U66OXGDM6YQ'
+   AWS_SECRET_ACCESS_KEY='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'
+   GIT_PWD='Shalini2018'
+   GIT_USER='Shalini1989'
+   GIT_URL='https://github.com/Shalini1989/SpringMvcSecurity.git'
+   
+	
+	
+   withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: '', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'], usernamePassword(credentialsId: '', passwordVariable: 'GIT_PWD', usernameVariable: 'GIT_USER')]) {
+    // some block
+}	
+   git url: GIT_URL
+	  
    mvnHome =  tool 'M3'
    stage('checkout/preparation')
    {  
