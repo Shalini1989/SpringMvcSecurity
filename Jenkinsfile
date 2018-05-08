@@ -14,13 +14,13 @@ node {
    GIT_USER='Shalini1989'
    GIT_URL='https://github.com/Shalini1989/SpringMvcSecurity.git'
    
+   stage('ConfigureCredentials')
+   {
 	
-	
-   withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: '', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'], usernamePassword(credentialsId: '', passwordVariable: 'GIT_PWD', usernameVariable: 'GIT_USER')]) {
+   withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: '', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'], usernamePassword(credentialsId: '', passwordVariable: 'GIT_PWD', usernameVariable: 'GIT_USER')])
     // some block
-}	
-   git url: GIT_URL
-	  
+   }	
+   git url: GIT_URL  
    mvnHome =  tool 'M3'
    stage('checkout/preparation')
    {  
