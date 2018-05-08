@@ -1,6 +1,5 @@
 node {
    echo 'Hello World**'
-   echo $AWS_ACCESS_KEY_ID
    def mvnHome
    def var
    git url: 'https://github.com/debgmail/SpringMvcSecurity.git'
