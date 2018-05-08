@@ -31,7 +31,7 @@ junit '**/target/surefire-reports/TEST-*.xml'
     }
     stage ('Docker push') {
        sh '''
-         var=`aws ecr get-login --no-include-email --region us-east-1`
+         var=aws ecr get-login --no-include-email --region us-east-1
          eval $var
          docker tag myrepo:latest 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest
          docker push 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest
