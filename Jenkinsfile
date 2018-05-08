@@ -2,7 +2,7 @@ node {
    echo 'Hello World**'
    def mvnHome
    def var
-   git url: 'https://github.com/debgmail/SpringMvcSecurity.git'
+   git url: 'https://github.com/Shalini1989/SpringMvcSecurity.git'
    mvnHome =  tool 'M3'
    stage('checkout/preparation')
    {  
