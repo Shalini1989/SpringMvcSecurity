@@ -20,7 +20,8 @@ junit '**/target/surefire-reports/TEST-*.xml'
 	    
     }
     stage('uploadtoRepo'){
-       s3Upload consoleLogLevel: 'INFO', dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'outputs3jenkins', excludedFile: '', flatten: false, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: false, selectedRegion: 'us-east-1', showDirectlyInBrowser: false, sourceFile: '**/target/*.war', storageClass: 'STANDARD', uploadFromSlave: false, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 's3', userMetadata: []    
+       sh '''
+       aws s3 cp **/target/*.war s3://outputs3jenkins --recursive
     }
     stage('Build image') {
         /* This builds the actual image; synonymous to
