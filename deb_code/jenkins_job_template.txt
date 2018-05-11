@@ -1,0 +1,13 @@
+- job:
+    name: JENKINS_JOB_NAME
+    description: 'JENKINS_JOB_DESCRIPTION'
+    project-type: pipeline
+    pipeline-scm:
+      scm:
+        - git:
+           url: JENKINS_FILE_URL
+           branches: {'*/master'}
+           credentials-id: JENKINS_GIT_CREDENTIALS
+           clean: true
+      script-path: Jenkinsfile
+      lightweight-checkout: true

@@ -1,0 +1,5 @@
+[jenkins]
+user=admin
+password=admin
+url=http://EC2_PUBLICIP:8080/jenkins
+query_plugins_info=False

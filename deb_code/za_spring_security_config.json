@@ -1,0 +1,22 @@
+{
+  "application":"spring_security",
+  "version":"1",
+  "build_job_name":"CI_Implementation",
+  "build_job_description":"CI Implementation thru Jenkins",
+  "build_tool":"maven",
+  "jenkins_file_url":"https://github.com/Shalini1989/SpringMvcSecurity.git",
+  "repo_credentials":{
+                      "user_name":"Shalini1989",
+                      "password":"Shalini2018"
+                     },
+  "aws_info":{
+              "AWS_ACCESS_KEY_ID":"AKIAIAE32U66OXGDM6YQ",
+              "AWS_SECRET_ACCESS_KEY":"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",
+              "AWS_DEFAULT_REGION":"us-east-1"
+             },
+  "source_code_url":"https://github.com/Shalini1989/SpringMvcSecurity.git",
+  "source_code_credentials":{
+                             "user_name":"Shalini1989",
+                             "password":"Shalini2018"
+                            }                       
+}

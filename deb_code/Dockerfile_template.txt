@@ -1,0 +1,40 @@
+FROM ubuntu:latest
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install openjdk-8-jdk wget
+RUN apt-get -y install openssh-client
+RUN apt-get -y install vim
+RUN apt-get -y install git
+RUN apt-get -y install docker.io
+RUN apt-get -y install zip
+RUN apt-get install -y python3
+RUN apt-get install -y python-pip
+RUN apt-get install -y curl
+RUN pip install awscli
+RUN mkdir /usr/local/tomcat
+RUN wget http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.31/bin/apache-tomcat-8.5.31.tar.gz -O /tmp/tomcat.tar.gz
+RUN apt-get update
+RUN cd /tmp && tar xvfz tomcat.tar.gz
+RUN cp -Rv /tmp/apache-tomcat-8.5.31/* /usr/local/tomcat/
+EXPOSE 8080
+CMD /usr/local/tomcat/bin/catalina.sh run
+RUN wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O /tmp/jenkins.war
+RUN apt-get update
+RUN cp -Rv /tmp/jenkins.war /usr/local/tomcat/webapps/
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+ENV JENKINS_HOME /var/lib/jenkins
+COPY security.groovy /var/lib/jenkins/init.groovy.d/security.groovy
+COPY plugins /var/lib/jenkins/plugins
+COPY SOURCE_YAML DESTINATION_YAML
+RUN mkdir -p etc/jenkins_jobs
+COPY SOURCE_INI DESTINATION_INI
+RUN pip install jenkins-job-builder
+RUN apt-get update -y
+RUN apt-get upgrade -y
+RUN cd usr/share
+RUN wget http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+RUN tar -xvzf apache-maven-3.3.9-bin.tar.gz
+RUN cp -r apache-maven-3.3.9 /usr/share/apache-maven
+RUN export M2_HOME=/usr/share/apache-maven
+ENV PATH=$PATH:/usr/share/apache-maven/bin
+COPY UTILITY_TEMPLATE_PATH /var/lib/jenkins/utility.sh
+WORKDIR /var/lib/jenkins
