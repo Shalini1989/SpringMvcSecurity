@@ -21,7 +21,7 @@ node {
     stage('uploadtoRepo'){
        //s3Upload consoleLogLevel: 'INFO', dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'outputs3jenkins', excludedFile: '', flatten: false, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: false, selectedRegion: 'us-east-1', showDirectlyInBrowser: false, sourceFile: '**/target/*.war', storageClass: 'STANDARD', uploadFromSlave: false, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 's3', userMetadata: []    
       sh '''
-	    aws s3 cp /var/lib/jenkins/workspace/CI_Implementation/target s3://outputs3jenkins/target --recursive
+	    aws s3 cp /var/lib/jenkins/jobs/CI_Implementation/workspace/target s3://outputs3jenkins/target --recursive
        '''
     }
     stage('Build image') {
