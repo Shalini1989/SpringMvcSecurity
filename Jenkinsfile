@@ -15,7 +15,7 @@ node {
          sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean install"
     }
     stage('Result') {
-       archive 'target/*.war'
+       archiveArtifacts 'target/*.war'
        junit '**/target/surefire-reports/TEST-*.xml'
     }
     stage('uploadtoRepo'){
