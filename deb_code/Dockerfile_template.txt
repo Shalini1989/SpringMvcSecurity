@@ -38,4 +38,3 @@ RUN export M2_HOME=/usr/share/apache-maven
 ENV PATH=$PATH:/usr/share/apache-maven/bin
 COPY UTILITY_TEMPLATE_PATH /var/lib/jenkins/utility.sh
 WORKDIR /var/lib/jenkins
-CMD ["utility.sh", "run"]

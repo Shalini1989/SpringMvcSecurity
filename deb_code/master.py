@@ -5,27 +5,30 @@ import shutil
 import sys
 import binascii
 import subprocess
+import time
+import codecs
+import urllib2
 
 application_name = sys.argv[1]
-print("First Argument= "+application_name)
+
+current_public_ip = subprocess.check_output('curl ident.me', shell=True)
+print("The Public IP is: "+current_public_ip)
 
 config_file_name = 'za_'+application_name+'_config.json'
 
 with open(config_file_name) as config_file:
     config_data = json.load(config_file)
 
-print('The Application Name is: '+ config_data["application"])
+print('The Application Name is: '+ '\033[1m'+'\033[92m'+ config_data["application"]+'\x1b[0m')
 
 directory_name = config_data["application"]+'_codes'
 
 if not os.path.exists(directory_name):
     os.makedirs(directory_name)
 
-text_service_start = file_structure.service_start()
-print('Command to Start Service: '+ text_service_start)
+text_service_start = file_structure.service_start(current_public_ip,str(config_data["build_job_name"]))
 
 cwd = os.getcwd()
-print("Current Directory: "+cwd)
     
 create_file_out=file_structure.create_file("utility.sh",text_service_start)
 move_file_out=file_structure.move_file(cwd+'/'+"utility.sh",cwd+'/'+directory_name+'/'+"utility.sh")
@@ -48,6 +51,8 @@ groovy_content = str.replace(groovy_content,"RANDOM_GIT_ID",hex_git_id)
 groovy_content = str.replace(groovy_content,"RANDOM_AWS_ID",hex_aws_id)
 
 write_groovy_file = file_structure.write_file_in_location("security.groovy",cwd+'/'+directory_name,groovy_content)
+print('\033[33m'+'Groovy File Created'+'\x1b[0m')
+
 
 with open(cwd+'/'+'Dockerfile_template.txt','r') as docker_file:
     docker_content = str(docker_file.read())
@@ -71,24 +76,44 @@ jenkins_yaml_content = str.replace(jenkins_yaml_content,"JENKINS_GIT_CREDENTIALS
 
 write_yaml_file = file_structure.write_file_in_location("jenkins.yaml",cwd+'/'+directory_name,jenkins_yaml_content)
 
-current_public_ip = subprocess.check_output('curl ident.me', shell=True)
-print("The Current Public IP is: "+current_public_ip)
-
 with open(cwd+'/'+'jenkins_auth_template.txt', 'r') as jenkins_auth_file:
     jenkins_auth_content = str(jenkins_auth_file.read())
 
 jenkins_yaml_content = str.replace(jenkins_auth_content,"EC2_PUBLICIP",current_public_ip)
 write_ini_auth_file = file_structure.write_file_in_location("jenkins_jobs.ini",cwd+'/'+directory_name,jenkins_yaml_content)
 
+print('\033[33m'+'Jenkins Configuration Setup Completed'+'\x1b[0m')
+
+print('\033[43m'+'Creating Docker Image ....'+'\x1b[0m')
+time.sleep(5)
 build_image_cmd = "sudo docker build -t mavenenv:latest -f "+directory_name+"/Dockerfile ."
-print("Build Image Command: "+build_image_cmd)
 build_image = subprocess.call(build_image_cmd, shell=True)
+print('\033[42m'+'Docker Image Created with Name: '+'mavenenv:latest'+'\x1b[0m')
 
+print('\033[45m'+'Creating Container ....'+'\x1b[0m')
+time.sleep(5)
 initiate_container_cmd = "sudo docker run -d --privileged -e AWS_ACCESS_KEY_ID="+str(config_data["aws_info"]["AWS_ACCESS_KEY_ID"])+" -e AWS_SECRET_ACCESS_KEY="+str(config_data["aws_info"]["AWS_SECRET_ACCESS_KEY"])+" -e AWS_DEFAULT_REGION="+str(config_data["aws_info"]["AWS_DEFAULT_REGION"])+" -p 8080:8080 mavenenv:latest"
-print("Initiate Conatiner Command: "+initiate_container_cmd)
 container_id = subprocess.check_output(initiate_container_cmd, shell=True)
-print("The Container ID is: "+container_id)
+print('\033[42m'+"Container Created with ID: "+container_id+'\x1b[0m')
 
+print('\033[44m'+'Launching Jenkins and Executing Jenkins Build ....'+'\x1b[0m')
+time.sleep(3)
 execute_pipeline_cmd = "sudo docker exec -ti "+str.replace(container_id,'\n','')+" sh utility.sh"
 print("Utility run command: "+execute_pipeline_cmd)
+time.sleep(20)
 execute_pipeline = subprocess.call(execute_pipeline_cmd, shell=True)
+print('\033[93m'+"Build Job Completed. Confirming Build Job Status ..."+'\x1b[0m')
+
+build_confirm_url = "http://"+current_public_ip+":8080/jenkins/job/"+str(config_data["build_job_name"])+"/lastBuild/api/json"
+try:
+    fRead = urllib2.urlopen(build_confirm_url, None, 30);
+except:
+    raise
+jsonResponse = json.loads(fRead.read());
+fRead.close();
+jobStatus = jsonResponse["result"]
+
+if jobStatus == 'SUCCESS':
+    print('\033[42m'+"Build Job Completed: "+'\033[1m'+"SUCCESSFULLY"+'\x1b[0m')
+else:
+    print('\033[41m'+"Build Job Completed: "+'\033[1m'+"IN ERROR"+'\x1b[0m')
