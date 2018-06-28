@@ -11,26 +11,25 @@ node {
     }
     stage('Preparation') { // for display purposes          
       sh "echo '-------preparation start--------------------------'"
-      //sh "/var/lib/jenkins/.local/bin/aws s3 cp s3://inputjenkinsbucket/myrepo-default-cluster.json $WORKSPACE/."
-      sh "/var/lib/jenkins/.local/bin/aws ecr describe-repositories"
-      sh "/var/lib/jenkins/.local/bin/aws ecr get-login --no-include-email >&1"
+      sh "aws ecr describe-repositories"
+      sh "aws ecr get-login --no-include-email >&1"
       sh "docker pull 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest"
       sh "echo '-------preparation end--------------------------'"
     }
     stage('Register task')
     {
-        sh "/var/lib/jenkins/.local/bin/aws ecs register-task-definition --cli-input-json file://$WORKSPACE/config/myrepo-default-cluster.json"
+        sh "aws ecs register-task-definition --cli-input-json file://$WORKSPACE/config/myrepo-default-cluster.json"
     }
     stage('Run Service')
     {
         sh '''
            TASK_FAMILY='first-run-task-defination'
-           TASK_ID='/var/lib/jenkins/.local/bin/aws ecs list-tasks --cluster default --desired-status RUNNING'
-           echo '/var/lib/jenkins/.local/bin/aws ecs stop-task --cluster default --task ${TASK_ID}'
-           TASK_REVISION=`/var/lib/jenkins/.local/bin/aws ecs describe-task-definition --task-definition myrepo | egrep 'revisio' | tr '/' ' ' | awk '{print $2}'  | sed 's/"$//' ` 
+           TASK_ID='aws ecs list-tasks --cluster default --desired-status RUNNING'
+           echo 'aws ecs stop-task --cluster default --task ${TASK_ID}'
+           TASK_REVISION=`aws ecs describe-task-definition --task-definition myrepo | egrep 'revisio' | tr '/' ' ' | awk '{print $2}'  | sed 's/"$//' ` 
            DESIRED_COUNT='1'
            SERVICE_NAME='ecs-myrepo-service'
-           echo `/var/lib/jenkins/.local/bin/aws ecs update-service --cluster default  --service ${SERVICE_NAME} --task-definition myrepo:${TASK_REVISION} --desired-count ${DESIRED_COUNT}`
+           echo `aws ecs update-service --cluster default  --service ${SERVICE_NAME} --task-definition myrepo:${TASK_REVISION} --desired-count ${DESIRED_COUNT}`
         '''
     }
 }
