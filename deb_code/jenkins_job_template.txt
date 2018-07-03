@@ -1,5 +1,5 @@
-- job:
-    name: JENKINS_JOB_NAME
+- job-template:
+    name: '{name}'
     description: 'JENKINS_JOB_DESCRIPTION'
     project-type: pipeline
     pipeline-scm:
@@ -9,5 +9,6 @@
            branches: {'*/master'}
            credentials-id: JENKINS_GIT_CREDENTIALS
            clean: true
-      script-path: Jenkinsfile
+      script-path: '{path}'
       lightweight-checkout: true
+

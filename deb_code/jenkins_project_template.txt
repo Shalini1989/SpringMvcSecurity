@@ -1,0 +1,10 @@
+- project:
+    name: project-example
+    jobs:
+      - '{name}':
+          name: JENKINS_JOB_CI
+          path: Jenkinsfile
+
+      - '{name}':
+          name: JENKINS_JOB_CD
+          path: config/Jenkinsfile

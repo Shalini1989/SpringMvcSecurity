@@ -1,8 +1,9 @@
 {
   "application":"spring_security",
   "version":"1",
-  "build_job_name":"CI_Implementation",
-  "build_job_description":"CI Implementation thru Jenkins",
+  "build_job_CI":"CI_Implementation",
+  "build_job_CD":"CD_Implementation",
+  "build_job_description":"CI/CD Implementation through Jenkins",
   "build_tool":"maven",
   "jenkins_file_url":"https://github.com/Shalini1989/SpringMvcSecurity.git",
   "repo_credentials":{
@@ -18,5 +19,6 @@
   "source_code_credentials":{
                              "user_name":"Shalini1989",
                              "password":"Shalini2018"
-                            }                       
+                            },
+  "run_cd_consecutively":"yes"
 }

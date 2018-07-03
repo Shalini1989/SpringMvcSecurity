@@ -26,7 +26,10 @@ directory_name = config_data["application"]+'_codes'
 if not os.path.exists(directory_name):
     os.makedirs(directory_name)
 
-text_service_start = file_structure.service_start(current_public_ip,str(config_data["build_job_name"]))
+if  config_data["run_cd_consecutively"] =='yes':
+    text_service_start = file_structure.service_start_cd(current_public_ip,str(config_data["build_job_CI"]),str(config_data["build_job_CD"]))
+else:
+    text_service_start = file_structure.service_start_ci(current_public_ip,str(config_data["build_job_CI"]))
 
 cwd = os.getcwd()
     
@@ -59,6 +62,14 @@ with open(cwd+'/'+'Dockerfile_template.txt','r') as docker_file:
 
 docker_content = str.replace(str(docker_content),"SOURCE_YAML", directory_name+'/'+ "jenkins.yaml")
 docker_content = str.replace(str(docker_content),"DESTINATION_YAML",str("/var/lib/jenkins/jobs/jenkins.yaml"))
+
+
+
+
+docker_content = str.replace(str(docker_content),"SRC_PROJ_YAML", directory_name+'/'+ "projects.yaml")
+docker_content = str.replace(str(docker_content),"DEST_PROJ_YAML",str("/var/lib/jenkins/jobs/projects.yaml"))
+
+
 docker_content = str.replace(str(docker_content),"SOURCE_INI", directory_name+'/'+ "jenkins_jobs.ini")
 docker_content = str.replace(str(docker_content),"DESTINATION_INI",str("/etc/jenkins_jobs/jenkins_jobs.ini"))
 docker_content = str.replace(str(docker_content),"UTILITY_TEMPLATE_PATH", directory_name+'/'+ "utility.sh")
@@ -69,7 +80,7 @@ write_docker_file = file_structure.write_file_in_location("Dockerfile",cwd+'/'+d
 with open(cwd+'/'+'jenkins_job_template.txt', 'r') as jenkins_yaml_file:
     jenkins_yaml_content = str(jenkins_yaml_file.read())
 
-jenkins_yaml_content = str.replace(jenkins_yaml_content,"JENKINS_JOB_NAME",str(config_data["build_job_name"]))
+'''jenkins_yaml_content = str.replace(jenkins_yaml_content,"JENKINS_JOB_NAME",str(config_data["build_job_name"]))'''
 jenkins_yaml_content = str.replace(jenkins_yaml_content,"JENKINS_JOB_DESCRIPTION",str(config_data["build_job_description"]))
 jenkins_yaml_content = str.replace(jenkins_yaml_content,"JENKINS_FILE_URL",str(config_data["jenkins_file_url"]))
 jenkins_yaml_content = str.replace(jenkins_yaml_content,"JENKINS_GIT_CREDENTIALS",hex_git_id)
@@ -81,6 +92,20 @@ with open(cwd+'/'+'jenkins_auth_template.txt', 'r') as jenkins_auth_file:
 
 jenkins_yaml_content = str.replace(jenkins_auth_content,"EC2_PUBLICIP",current_public_ip)
 write_ini_auth_file = file_structure.write_file_in_location("jenkins_jobs.ini",cwd+'/'+directory_name,jenkins_yaml_content)
+
+
+with open(cwd+'/'+'jenkins_project_template.txt', 'r') as jenkins_proj_file:
+     jenkins_proj_content = str(jenkins_proj_file.read())
+
+jenkins_proj_content = str.replace(jenkins_proj_content,"JENKINS_JOB_CI",str(config_data["build_job_CI"]))
+jenkins_proj_content = str.replace(jenkins_proj_content,"JENKINS_JOB_CD",str(config_data["build_job_CD"]))
+
+
+
+write_yaml_file = file_structure.write_file_in_location("projects.yaml",cwd+'/'+directory_name,jenkins_proj_content)
+
+
+
 
 print('\033[33m'+'Jenkins Configuration Setup Completed'+'\x1b[0m')
 
@@ -104,7 +129,7 @@ time.sleep(20)
 execute_pipeline = subprocess.call(execute_pipeline_cmd, shell=True)
 print('\033[93m'+"Build Job Completed. Confirming Build Job Status ..."+'\x1b[0m')
 
-build_confirm_url = "http://"+current_public_ip+":8080/jenkins/job/"+str(config_data["build_job_name"])+"/lastBuild/api/json"
+build_confirm_url = "http://"+current_public_ip+":8080/jenkins/job/"+str(config_data["build_job_CI"])+"/lastBuild/api/json"
 try:
     fRead = urllib2.urlopen(build_confirm_url, None, 30);
 except:
