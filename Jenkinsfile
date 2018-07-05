@@ -1,5 +1,5 @@
 node {
-   echo 'Hello World, Hi !'
+   echo 'Hello World, Welcome'
    def mvnHome
    def var
    git url: 'https://github.com/Shalini1989/SpringMvcSecurity.git'
