@@ -4,7 +4,7 @@ node {
     def TASK_FAMILY
     def TASK_REVISION
     def DESIRED_COUNT
-    git url: 'https://github.com/debgmail/SpringMvcSecurity.git'
+    git url: 'https://github.com/Shalini1989/SpringMvcSecurity.git'
     stage('checkout'){  
        sh "rm -rf $WORKSPACE/*"	   
        checkout scm
