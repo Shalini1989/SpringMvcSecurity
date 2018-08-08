@@ -23,7 +23,7 @@ node {
     stage('Run Service')
     {
         sh '''
-           TASK_FAMILY='first-run-task-defination'
+           TASK_FAMILY='first-run-task-definition'
            TASK_ID='aws ecs list-tasks --cluster default --desired-status RUNNING'
            echo 'aws ecs stop-task --cluster default --task ${TASK_ID}'
            TASK_REVISION=`aws ecs describe-task-definition --task-definition myrepo | egrep 'revisio' | tr '/' ' ' | awk '{print $2}'  | sed 's/"$//' ` 
