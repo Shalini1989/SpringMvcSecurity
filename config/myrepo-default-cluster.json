@@ -6,7 +6,7 @@
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/ecs/myrepo",
-          "awslogs-region": "ap-southeast-1",
+          "awslogs-region": "us-east-2",
           "awslogs-stream-prefix": "ecs"
         }
       },
@@ -24,7 +24,7 @@
       "mountPoints": [],
       "memoryReservation": 1024,
       "volumesFrom": [],
-      "image": "085396960228.dkr.ecr.ap-southeast-1.amazonaws.com/myrepo:latest",
+      "image": "085396960228.dkr.ecr.us-east-2.amazonaws.com/myrepo:latest",
       "essential": true,
       "links": [],
       "name": "myrepo"
