@@ -14,6 +14,11 @@ node {
 	  // Run the maven build
          sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean install"
     }
+	
+   stage('Result') {
+       archiveArtifacts 'target/*.war'
+       junit '**/target/surefire-reports/TEST-*.xml'
+    }
     
     stage('uploadtoRepo'){
       // s3Upload consoleLogLevel: 'INFO', dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'outputs3jenkins', excludedFile: '', flatten: false, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: false, selectedRegion: 'us-east-1', showDirectlyInBrowser: false, sourceFile: '**/target/*.war', storageClass: 'STANDARD', uploadFromSlave: false, useServerSideEncryption: false]], pluginFailureResultConstraint: 'FAILURE', profileName: 's3', userMetadata: []    
