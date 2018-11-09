@@ -13,7 +13,7 @@ node {
       sh "echo '-------preparation start--------------------------'"
       sh "aws ecr describe-repositories"
       sh "aws ecr get-login --no-include-email >&1"
-      sh "docker pull 085396960228.dkr.ecr.ap-southeast-1.amazonaws.com/myrepo:latest"
+      sh "docker pull 085396960228.dkr.ecr.us-east-2.amazonaws.com/myrepo:latest"
       sh "echo '-------preparation end--------------------------'"
     }
     stage('Register task')
