@@ -14,7 +14,7 @@ node {
       sh "aws ecr describe-repositories"
       sh "aws ecr get-login --no-include-email > 085396960228.sh"
       sh "mv /var/lib/jenkins/jobs/CD_Implementation/workspace/085396960228.sh /var/lib/jenkins/085396960228.sh"      
-      sh "docker pull 085396960228.dkr.ecr.us-east-2.amazonaws.com/myrepo:latest"
+      sh "docker pull 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest"
       sh "rm /var/lib/jenkins/085396960228.sh"
       sh "echo '-------preparation end--------------------------'"
     }
