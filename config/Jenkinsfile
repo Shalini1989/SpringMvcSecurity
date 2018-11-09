@@ -13,6 +13,8 @@ node {
       sh "echo '-------preparation start--------------------------'"
       sh "aws ecr describe-repositories"
       sh "aws ecr get-login --no-include-email > 085396960228.sh"
+      sh "ls -l"
+      sh "pwd"
       sh "085396960228.sh"      
       sh "docker pull 085396960228.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest"
       sh "rm 085396960228.sh"
